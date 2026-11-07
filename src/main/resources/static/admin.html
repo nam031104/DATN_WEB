@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#183c2d" />
+    <title>Chicken Monitor | Quản trị</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/auth.css" />
+    <link rel="stylesheet" href="/assets/app.css" />
+    <script src="/assets/admin.js" defer></script>
+  </head>
+  <body class="app-body">
+    <header class="topbar">
+      <a class="app-brand" href="/dashboard.html" aria-label="Chicken Monitor">
+        <span class="brand-mark" aria-hidden="true"
+          ><span></span><span></span><span></span
+        ></span>
+        <span>chicken<span class="brand-light">monitor</span></span>
+      </a>
+      <nav class="main-nav admin-nav" aria-label="Điều hướng">
+        <a class="nav-link" href="/dashboard.html">Trang trại</a>
+        <span class="nav-link is-active" aria-current="page">Quản trị</span>
+      </nav>
+      <div class="profile-menu">
+        <button
+          id="profile-button"
+          class="profile-button"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          <span id="profile-initial" class="avatar">A</span>
+          <span class="profile-copy"
+            ><strong id="profile-name">Quản trị viên</strong
+            ><small>ADMIN</small></span
+          >
+          <span class="profile-chevron" aria-hidden="true">⌄</span>
+        </button>
+        <div id="profile-popover" class="profile-popover" hidden>
+          <p id="profile-email"></p>
+          <button id="logout-button" type="button">
+            <span aria-hidden="true">↗</span> Đăng xuất
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <div id="admin-alert" class="app-alert" role="alert" hidden></div>
+      <section class="page-section">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">QUẢN TRỊ HỆ THỐNG</p>
+            <h1>Người dùng & thiết bị</h1>
+            <p class="muted-copy">
+              Tạo tài khoản, cấp mã thiết bị và gán chuồng cho người dùng.
+            </p>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          <section class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">TÀI KHOẢN</p>
+                <h2>Người dùng</h2>
+              </div>
+              <button id="add-user-button" class="primary-button" type="button">
+                <span aria-hidden="true">＋</span> Thêm user
+              </button>
+            </div>
+            <div id="admin-users" class="table-wrap"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">KẾT NỐI THIẾT BỊ</p>
+                <h2>Thiết bị đã cấp</h2>
+              </div>
+              <button
+                id="add-device-button"
+                class="primary-button"
+                type="button"
+              >
+                <span aria-hidden="true">＋</span> Cấp thiết bị
+              </button>
+            </div>
+            <div id="admin-devices" class="table-wrap"></div>
+          </section>
+        </div>
+
+        <section id="admin-user-form-panel" class="panel form-panel" hidden>
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">TÀI KHOẢN MỚI</p>
+              <h2>Tạo người dùng</h2>
+            </div>
+            <button
+              id="cancel-user-button"
+              class="icon-button"
+              type="button"
+              aria-label="Đóng"
+            >
+              ×
+            </button>
+          </div>
+          <form id="admin-user-form" class="data-form">
+            <label
+              >Họ tên<input name="fullname" required maxlength="100"
+            /></label>
+            <label
+              >Tên đăng nhập<input name="username" required maxlength="50"
+            /></label>
+            <label
+              >Email<input name="email" type="email" required maxlength="100"
+            /></label>
+            <label
+              >Mật khẩu<input
+                name="password"
+                type="password"
+                required
+                minlength="8"
+            /></label>
+            <label
+              >Vai trò<select name="role">
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
+              </select></label
+            >
+            <div class="form-actions">
+              <button class="primary-button" type="submit">
+                Tạo tài khoản
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section id="admin-device-form-panel" class="panel form-panel" hidden>
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">CẤU HÌNH THIẾT BỊ</p>
+              <h2>Cấp mã và linh kiện</h2>
+            </div>
+            <button
+              id="cancel-device-button"
+              class="icon-button"
+              type="button"
+              aria-label="Đóng"
+            >
+              ×
+            </button>
+          </div>
+          <form id="admin-device-form" class="data-form form-grid">
+            <label
+              >Mã thiết bị<input
+                name="deviceCode"
+                required
+                maxlength="100"
+                placeholder="stm32_2"
+            /></label>
+            <label
+              >Tên hiển thị<input name="name" required maxlength="50"
+            /></label>
+            <label
+              >Loại thiết bị<input
+                name="typeDevice"
+                required
+                maxlength="255"
+                placeholder="Bộ điều khiển STM32"
+            /></label>
+            <label>Người dùng<select name="userId"></select></label>
+            <label>Chuồng thuộc user<select name="farmId"></select></label>
+            <label>Ghi chú<input name="note" maxlength="255" /></label>
+            <label class="wide-field"
+              >Cảm biến (mỗi dòng: mã:type)<textarea
+                name="sensors"
+                rows="3"
+                placeholder="temp_1:temperature&#10;humidity_1:humidity&#10;nh3_1:nh3&#10;weight_1:weight"
+              ></textarea>
+            </label>
+            <label class="wide-field"
+              >Actor (mỗi dòng: mã:type)<textarea
+                name="actors"
+                rows="3"
+                placeholder="pump_1:pump&#10;fan_1:fan&#10;light_1:light"
+              ></textarea>
+            </label>
+            <div class="form-actions wide-field">
+              <button class="primary-button" type="submit">Cấp thiết bị</button>
+            </div>
+          </form>
+          <p class="panel-note">
+            Có thể để trống cả người dùng và chuồng để tạo mã chờ người dùng
+            ghép nối.
+          </p>
+        </section>
+      </section>
+      <footer class="app-footer">
+        <span>CHICKEN MONITOR</span><span>KHU VỰC QUẢN TRỊ</span>
+      </footer>
+    </main>
+  </body>
+</html>

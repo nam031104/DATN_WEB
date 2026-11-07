@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: chickenmonitor
+  datasource:
+    url: jdbc:mysql://localhost:3306/chickenmonitor?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: 123456
+
+app:
+  mqtt:
+    enabled: ${MQTT_ENABLED:true}
+    broker-url: ${MQTT_BROKER_URL:tcp://localhost:1883}
+    client-id: ${MQTT_CLIENT_ID:chickenmonitor-server}
+    username: ${MQTT_USERNAME:}
+    password: ${MQTT_PASSWORD:}
+  camera:
+    service-url: ${CAMERA_SERVICE_URL:http://192.168.1.9:8000}
+    service-token: ${CAMERA_SERVICE_TOKEN:chicken-secret}
