@@ -42,15 +42,7 @@ export function openDeviceRecordForm(device = null) {
 }
 
 export function bindDeviceEvents() {
-  document
-    .querySelector("#add-device-record-button")
-    .addEventListener("click", () => {
-      if (!state.farmId) {
-        notify("Chọn hoặc tạo khu vực chuồng trước khi thêm thiết bị.");
-        return;
-      }
-      openDeviceRecordForm();
-    });
+
   document
     .querySelector("#cancel-device-record-button")
     .addEventListener("click", () => {

@@ -65,18 +65,6 @@ public class DeviceController {
         return ResponseEntity.ok(toResponse(ownedDevice(id, authentication)));
     }
 
-    @PostMapping
-    public ResponseEntity<DeviceResponse> createDevice(@RequestBody DeviceRequest request,
-                                                       Authentication authentication) {
-        Farm farm = ownedFarm(request.farmId(), authentication);
-        Device device = Device.builder()
-                .farm(farm)
-                .name(requireText(request.name(), "Tên thiết bị"))
-                .typeDevice(requireText(request.typeDevice(), "Loại thiết bị"))
-                .note(request.note())
-                .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(deviceRepository.save(device)));
-    }
 
     @PutMapping("/{id}")
     public ResponseEntity<DeviceResponse> updateDevice(@PathVariable Long id, @RequestBody DeviceRequest request,
