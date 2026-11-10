@@ -5,6 +5,7 @@ import com.chickenmonitor.dto.request.ClaimDeviceRequest;
 import com.chickenmonitor.dto.response.DeviceResponse;
 import com.chickenmonitor.entity.Device;
 import com.chickenmonitor.entity.Farm;
+import com.chickenmonitor.entity.Notification;
 import com.chickenmonitor.entity.User;
 import com.chickenmonitor.repository.DeviceRepository;
 import com.chickenmonitor.repository.FarmRepository;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import com.chickenmonitor.service.NotificationService;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class DeviceController {
     private final DeviceRepository deviceRepository;
     private final FarmRepository farmRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
     @PostMapping("/claim")
     public ResponseEntity<DeviceResponse> claimDevice(@RequestBody ClaimDeviceRequest request,
@@ -38,6 +41,12 @@ public class DeviceController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Không tìm thấy thiết bị chưa gán với mã này."));
         device.setFarm(ownedFarm(request.farmId(), authentication));
+        User user = currentUser(authentication);
+        notificationService.createNotification(Notification.builder()
+                .user(user)
+                .message("Ghép thiết bị thành công")
+                .status(0)
+                .build());
         return ResponseEntity.ok(toResponse(deviceRepository.save(device)));
     }
 

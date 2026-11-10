@@ -86,7 +86,11 @@ public class AuthController {
         user.setRole("USER");
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
-
+        notificationService.createNotification(Notification.builder()
+                .user(user)
+                .message("Đăng ký thành công vào hệ thống Chicken Monitor.")
+                .status(0)
+                .build());
 
         return ResponseEntity.ok(Map.of("message", "Đăng ký thành công!"));
     }
@@ -114,16 +118,6 @@ public class AuthController {
 
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-            try {
-                notificationService.createNotification(Notification.builder()
-                        .user(user)
-                        .message("Đăng nhập thành công vào hệ thống Chicken Monitor.")
-                        .status(0)
-                        .build());
-            } catch (RuntimeException ex) {
-                // An optional notification must not block a successful login.
-                log.warn("Không lưu được thông báo đăng nhập cho user {}", user.getUserId(), ex);
-            }
 
             return ResponseEntity.ok(Map.of(
                     "message", "Đăng nhập thành công",
