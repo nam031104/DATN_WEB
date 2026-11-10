@@ -1,558 +1,606 @@
 <!doctype html>
 <html lang="vi">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#183c2d" />
-    <title>Chicken Monitor | Tổng quan</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/assets/auth.css" />
-    <link rel="stylesheet" href="/assets/app.css" />
-    <script
-      src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"
-      defer
-    ></script>
-    <script type="module" src="/assets/app.js"></script>
-  </head>
-  <body class="app-body">
-    <header class="topbar">
-      <a class="app-brand" href="/dashboard.html" aria-label="Chicken Monitor">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#183c2d" />
+  <title>Chicken Monitor | Tổng quan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+          rel="stylesheet"
+  />
+  <link rel="stylesheet" href="/assets/auth.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+  <script
+          src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"
+          defer
+  ></script>
+  <script type="module" src="/assets/app.js"></script>
+</head>
+<body class="app-body">
+<header class="topbar">
+  <a class="app-brand" href="/dashboard.html" aria-label="Chicken Monitor">
         <span class="brand-mark" aria-hidden="true"
-          ><span></span><span></span><span></span
+        ><span></span><span></span><span></span
         ></span>
-        <span>chicken<span class="brand-light">monitor</span></span>
-      </a>
-      <div class="farm-picker">
-        <label for="farm-select">ĐANG XEM</label>
-        <select id="farm-select" aria-label="Chọn khu vực chuồng"></select>
-      </div>
-      <nav class="main-nav" aria-label="Điều hướng chính">
-        <button class="nav-link is-active" type="button" data-page="overview">
-          Tổng quan
-        </button>
-        <button class="nav-link" type="button" data-page="farms">
-          Khu vực chuồng
-        </button>
-        <button class="nav-link" type="button" data-page="devices">
-          Thiết bị
-        </button>
-        <button class="nav-link" type="button" data-page="schedules">
-          Lên lịch
-        </button>
-        <button class="nav-link" type="button" data-page="history">
-          Dữ liệu
-        </button>
-        <button class="nav-link" type="button" data-page="notifications">
-          Thông báo
-          <span id="notification-count" class="nav-count" hidden>0</span>
-        </button>
-        <a class="nav-link admin-link" href="/admin.html" hidden>Quản trị</a>
-      </nav>
-      <div class="profile-menu">
-        <button
-          id="profile-button"
-          class="profile-button"
-          type="button"
-          aria-expanded="false"
-          aria-haspopup="true"
-        >
-          <span id="profile-initial" class="avatar">U</span>
-          <span class="profile-copy"
-            ><strong id="profile-name">Tài khoản</strong
-            ><small id="profile-role">USER</small></span
-          >
-          <span class="profile-chevron" aria-hidden="true">⌄</span>
-        </button>
-        <div id="profile-popover" class="profile-popover" hidden>
-          <p id="profile-email"></p>
-          <button id="logout-button" type="button">
-            <span aria-hidden="true">↗</span> Đăng xuất
-          </button>
-        </div>
-      </div>
-    </header>
+    <span>chicken<span class="brand-light">monitor</span></span>
+  </a>
+  <div class="farm-picker">
+    <label for="farm-select">ĐANG XEM</label>
+    <select id="farm-select" aria-label="Chọn khu vực chuồng"></select>
+  </div>
+  <nav class="main-nav" aria-label="Điều hướng chính">
+    <button class="nav-link is-active" type="button" data-page="overview">
+      Tổng quan
+    </button>
+    <button class="nav-link" type="button" data-page="farms">
+      Khu vực chuồng
+    </button>
+    <button class="nav-link" type="button" data-page="devices">
+      Thiết bị
+    </button>
+    <button class="nav-link" type="button" data-page="schedules">
+      Lên lịch
+    </button>
+    <button class="nav-link" type="button" data-page="history">
+      Dữ liệu
+    </button>
+    <button class="nav-link" type="button" data-page="notifications">
+      Thông báo
+      <span id="notification-count" class="nav-count" hidden>0</span>
+    </button>
+    <a class="nav-link admin-link" href="/admin.html" hidden>Quản trị</a>
+  </nav>
+  <div class="profile-menu">
+    <button
+            id="profile-button"
+            class="profile-button"
+            type="button"
+            aria-expanded="false"
+            aria-haspopup="true"
+    >
+      <span id="profile-initial" class="avatar">U</span>
+      <span class="profile-copy"
+      ><strong id="profile-name">Tài khoản</strong
+      ><small id="profile-role">USER</small></span
+      >
+      <span class="profile-chevron" aria-hidden="true">⌄</span>
+    </button>
+    <div id="profile-popover" class="profile-popover" hidden>
+      <p id="profile-email"></p>
+      <button id="logout-button" type="button">
+        <span aria-hidden="true">↗</span> Đăng xuất
+      </button>
+    </div>
+  </div>
+</header>
 
-    <main class="app-main">
-      <div id="page-alert" class="app-alert" role="alert" hidden></div>
-      <section id="overview-page" class="page-section" data-view="overview">
-        <div class="page-heading">
-          <div>
-            <p class="eyebrow">BẢNG ĐIỀU KHIỂN</p>
-            <h1>Tổng quan trang trại</h1>
-            <p id="welcome-copy" class="muted-copy">
-              Dữ liệu vận hành sẽ cập nhật tại đây.
-            </p>
-          </div>
-          <div class="live-state">
+<main class="app-main">
+  <div id="page-alert" class="app-alert" role="alert" hidden></div>
+  <section id="overview-page" class="page-section" data-view="overview">
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">BẢNG ĐIỀU KHIỂN</p>
+        <h1>Tổng quan trang trại</h1>
+        <p id="welcome-copy" class="muted-copy">
+          Dữ liệu vận hành sẽ cập nhật tại đây.
+        </p>
+      </div>
+      <div class="live-state">
             <span class="live-dot"></span
             ><span id="connection-label">Đang kết nối</span
-            ><span id="last-updated"></span>
-          </div>
-        </div>
-        <div class="overview-stats">
-          <article class="stat-block">
-            <span class="stat-icon stat-green">⌂</span>
-            <div>
+      ><span id="last-updated"></span>
+      </div>
+    </div>
+    <div class="overview-stats">
+      <article class="stat-block">
+        <span class="stat-icon stat-green">⌂</span>
+        <div>
               <span class="stat-label">Thiết bị</span
               ><strong id="device-total">—</strong
-              ><small id="device-status">Trong khu vực</small>
-            </div>
-          </article>
-          <article class="stat-block">
-            <span class="stat-icon stat-yellow">◉</span>
-            <div>
+        ><small id="device-status">Trong khu vực</small>
+        </div>
+      </article>
+      <article class="stat-block">
+        <span class="stat-icon stat-yellow">◉</span>
+        <div>
               <span class="stat-label">Cảm biến</span
               ><strong id="sensor-total">—</strong
-              ><small>Có số liệu gần nhất</small>
-            </div>
-          </article>
-          <article class="stat-block">
-            <span class="stat-icon stat-red">⌁</span>
-            <div>
+        ><small>Có số liệu gần nhất</small>
+        </div>
+      </article>
+      <article class="stat-block">
+        <span class="stat-icon stat-red">⌁</span>
+        <div>
               <span class="stat-label">Thiết bị chấp hành</span
               ><strong id="actor-total">—</strong
-              ><small id="actor-status">Đang điều khiển</small>
-            </div>
-          </article>
-          <article class="stat-block">
-            <span class="stat-icon stat-blue">◷</span>
-            <div>
+        ><small id="actor-status">Đang điều khiển</small>
+        </div>
+      </article>
+      <article class="stat-block">
+        <span class="stat-icon stat-blue">◷</span>
+        <div>
               <span class="stat-label">Cảnh báo</span
               ><strong id="alert-total">—</strong><small>Chưa đọc</small>
-            </div>
-          </article>
         </div>
+      </article>
+    </div>
 
-        <div class="dashboard-grid">
-          <section class="panel sensor-panel">
-            <div class="panel-heading">
-              <div>
-                <p class="eyebrow">THEO DÕI MÔI TRƯỜNG</p>
-                <h2>Khu vực cảm biến</h2>
-              </div>
-              <button class="text-action" type="button" data-go="history">
-                Xem lịch sử <span aria-hidden="true">→</span>
-              </button>
-            </div>
-            <div id="sensor-grid" class="sensor-grid">
-              <div class="empty-state">Đang tải dữ liệu cảm biến...</div>
-            </div>
-          </section>
-          <section class="panel camera-panel">
-            <div class="panel-heading">
-              <div>
-                <p class="eyebrow">GIÁM SÁT TẠI CHỖ</p>
-                <h2>Khu vực camera</h2>
-              </div>
-              <span class="small-status">ON-DEMAND</span>
-            </div>
-            <div id="camera-grid" class="camera-grid">
-              <button class="camera-tile" type="button" data-camera="1">
+    <div class="dashboard-grid">
+      <section class="panel sensor-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">THEO DÕI MÔI TRƯỜNG</p>
+            <h2>Khu vực cảm biến</h2>
+          </div>
+          <button class="text-action" type="button" data-go="history">
+            Xem lịch sử <span aria-hidden="true">→</span>
+          </button>
+        </div>
+        <div id="sensor-grid" class="sensor-grid">
+          <div class="empty-state">Đang tải dữ liệu cảm biến...</div>
+        </div>
+      </section>
+      <section class="panel camera-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">GIÁM SÁT TẠI CHỖ</p>
+            <h2>Khu vực camera</h2>
+          </div>
+          <span class="small-status">ON-DEMAND</span>
+        </div>
+        <div id="camera-grid" class="camera-grid">
+          <button class="camera-tile" type="button" data-camera="1">
                 <span class="camera-feed"
-                  ><span class="camera-crosshair"></span
-                  ><span class="camera-state">CHƯA CẤU HÌNH</span></span
+                ><span class="camera-crosshair"></span
+                ><span class="camera-state">CHƯA CẤU HÌNH</span></span
                 ><span class="camera-caption"
-                  ><strong>Camera 01</strong
-                  ><small>Chọn để yêu cầu luồng</small></span
-                >
-              </button>
-              <button class="camera-tile" type="button" data-camera="2">
+          ><strong>Camera 01</strong
+          ><small>Chọn để yêu cầu luồng</small></span
+          >
+          </button>
+          <button class="camera-tile" type="button" data-camera="2">
                 <span class="camera-feed camera-feed-alt"
-                  ><span class="camera-crosshair"></span
-                  ><span class="camera-state">CHƯA CẤU HÌNH</span></span
+                ><span class="camera-crosshair"></span
+                ><span class="camera-state">CHƯA CẤU HÌNH</span></span
                 ><span class="camera-caption"
-                  ><strong>Camera 02</strong
-                  ><small>Chọn để yêu cầu luồng</small></span
-                >
-              </button>
-            </div>
-            <p class="panel-note">
-              Video trực tiếp cần dịch vụ chuyển RTSP sang HLS/WebRTC để phát
-              trên trình duyệt.
-            </p>
-          </section>
+          ><strong>Camera 02</strong
+          ><small>Chọn để yêu cầu luồng</small></span
+          >
+          </button>
         </div>
+        <p class="panel-note">
+          Video trực tiếp cần dịch vụ chuyển RTSP sang HLS/WebRTC để phát
+          trên trình duyệt.
+        </p>
+      </section>
+    </div>
 
-        <section class="panel actor-panel">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">ĐIỀU KHIỂN THIẾT BỊ</p>
-              <h2>Thiết bị chấp hành</h2>
-            </div>
-            <button class="text-action" type="button" data-go="schedules">
-              Lên lịch <span aria-hidden="true">→</span>
-            </button>
+    <section class="panel actor-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">ĐIỀU KHIỂN THIẾT BỊ</p>
+          <h2>Thiết bị chấp hành</h2>
+        </div>
+        <button class="text-action" type="button" data-go="schedules">
+          Lên lịch <span aria-hidden="true">→</span>
+        </button>
+      </div>
+      <div id="actor-list" class="actor-list">
+        <div class="empty-state">Chưa có thiết bị chấp hành.</div>
+      </div>
+      <form id="actor-config-form" class="actor-config-form" hidden>
+        <div class="actor-config-heading">
+          <div>
+            <p class="eyebrow">CẤU HÌNH ĐIỀU KHIỂN</p>
+            <h3 id="actor-config-title">Chọn chế độ cho thiết bị</h3>
           </div>
-          <div id="actor-list" class="actor-list">
-            <div class="empty-state">Chưa có thiết bị chấp hành.</div>
-          </div>
-          <form id="actor-config-form" class="actor-config-form" hidden>
-            <div class="actor-config-heading">
-              <div>
-                <p class="eyebrow">CẤU HÌNH ĐIỀU KHIỂN</p>
-                <h3 id="actor-config-title">Chọn chế độ cho thiết bị</h3>
-              </div>
-              <button
-                id="cancel-actor-config"
-                class="icon-button"
-                type="button"
-                aria-label="Đóng"
-              >
-                ×
-              </button>
-            </div>
-            <input name="actorId" type="hidden" />
-            <div class="actor-config-fields">
-              <label
-                >Chế độ<select name="mode">
-                  <option value="0">Tự động theo ngưỡng</option>
-                  <option value="1">Thủ công</option>
-                </select></label
-              >
-              <label data-auto-field
-                >Nguồn cảm biến<select name="sourceSensorCode" required></select
-              ></label>
-              <label data-auto-field
-                >Ngưỡng bật<input
+          <button
+                  id="cancel-actor-config"
+                  class="icon-button"
+                  type="button"
+                  aria-label="Đóng"
+          >
+            ×
+          </button>
+        </div>
+        <input name="actorId" type="hidden" />
+        <div class="actor-config-fields">
+          <label
+          >Chế độ<select name="mode">
+            <option value="0">Tự động theo ngưỡng</option>
+            <option value="1">Thủ công</option>
+          </select></label
+          >
+          <label data-auto-field
+          >Nguồn cảm biến<select name="sourceSensorCode" required></select
+          ></label>
+          <label data-auto-field
+          >Ngưỡng bật<input
                   name="thresholdMax"
                   type="number"
                   step="any"
                   required
-              /></label>
-              <label data-auto-field
-                >Ngưỡng tắt<input
+          /></label>
+          <label data-auto-field
+          >Ngưỡng tắt<input
                   name="thresholdMin"
                   type="number"
                   step="any"
                   required
-              /></label>
-            </div>
-            <div class="form-actions">
-              <button class="primary-button" type="submit">Lưu cấu hình</button>
-            </div>
-          </form>
-        </section>
-      </section>
-
-      <section class="page-section" data-view="farms" hidden>
-        <div class="page-heading">
-          <div>
-            <p class="eyebrow">KHÔNG GIAN CHĂN NUÔI</p>
-            <h1>Quản lý khu vực chuồng</h1>
-            <p class="muted-copy">
-              Tạo và cập nhật các khu vực bạn đang theo dõi.
-            </p>
-          </div>
-          <div class="heading-actions">
-            <button id="add-farm-button" class="primary-button" type="button">
-              <span aria-hidden="true">＋</span> Thêm khu vực
-            </button>
-          </div>
+          /></label>
         </div>
-        <div id="farm-list" class="farm-list"></div>
-        <section id="farm-form-panel" class="panel form-panel" hidden>
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">THÔNG TIN KHU VỰC</p>
-              <h2 id="farm-form-title">Thêm khu vực chuồng</h2>
-            </div>
-            <button
-              id="cancel-farm-button"
-              class="icon-button"
-              type="button"
-              aria-label="Đóng"
-            >
-              ×
-            </button>
-          </div>
-          <form id="farm-form" class="data-form">
-            <label
-              >Tên khu vực<input
+        <div class="form-actions">
+          <button class="primary-button" type="submit">Lưu cấu hình</button>
+        </div>
+      </form>
+    </section>
+  </section>
+
+  <section class="page-section" data-view="farms" hidden>
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">KHÔNG GIAN CHĂN NUÔI</p>
+        <h1>Quản lý khu vực chuồng</h1>
+        <p class="muted-copy">
+          Tạo và cập nhật các khu vực bạn đang theo dõi.
+        </p>
+      </div>
+      <div class="heading-actions">
+        <button id="add-farm-button" class="primary-button" type="button">
+          <span aria-hidden="true">＋</span> Thêm khu vực
+        </button>
+      </div>
+    </div>
+    <div id="farm-list" class="farm-list"></div>
+    <section id="farm-form-panel" class="panel form-panel" hidden>
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">THÔNG TIN KHU VỰC</p>
+          <h2 id="farm-form-title">Thêm khu vực chuồng</h2>
+        </div>
+        <button
+                id="cancel-farm-button"
+                class="icon-button"
+                type="button"
+                aria-label="Đóng"
+        >
+          ×
+        </button>
+      </div>
+      <form id="farm-form" class="data-form">
+        <label
+        >Tên khu vực<input
                 name="name"
                 required
                 maxlength="50"
                 placeholder="Ví dụ: Chuồng số 1" /></label
-            ><label
-              >Vị trí<input
-                name="location"
-                maxlength="255"
-                placeholder="Khu A" /></label
-            ><label
-              >Mô tả<textarea
-                name="description"
-                maxlength="255"
-                rows="3"
-                placeholder="Ghi chú thêm"
-              ></textarea>
-            </label>
-            <div class="form-actions">
-              <button class="primary-button" type="submit">Lưu khu vực</button>
-            </div>
-          </form>
-        </section>
-      </section>
-
-      <section class="page-section" data-view="devices" hidden>
-        <div class="page-heading">
-          <div>
-            <p class="eyebrow">THIẾT BỊ TRONG TRANG TRẠI</p>
-            <h1>Quản lý thiết bị</h1>
-            <p class="muted-copy">
-               ghép mã đã được cấp vào khu vực đang chọn.
-            </p>
-          </div>
-          <div class="heading-actions">
-            <button
-              id="claim-device-button"
-              class="secondary-button"
-              type="button"
-            >
-              Ghép mã thiết bị
-            </button>
-          </div>
+        ><label
+      >Vị trí<input
+              name="location"
+              maxlength="255"
+              placeholder="Khu A" /></label
+      ><label
+      >Mô tả<textarea
+              name="description"
+              maxlength="255"
+              rows="3"
+              placeholder="Ghi chú thêm"
+      ></textarea>
+      </label>
+        <div class="form-actions">
+          <button class="primary-button" type="submit">Lưu khu vực</button>
         </div>
-        <section class="panel device-management-panel">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">KHU VỰC ĐANG CHỌN</p>
-              <h2 id="device-farm-title">Thiết bị</h2>
-            </div>
-            <span class="small-status">DỮ LIỆU TỪ THIẾT BỊ ĐÃ GHÉP</span>
-          </div>
-          <div id="farm-devices" class="table-wrap">
-            <div class="empty-state">
-              Chọn khu vực chuồng ở thanh trên để xem thiết bị.
-            </div>
-          </div>
-        </section>
-        <section id="farm-device-form-panel" class="panel form-panel" hidden>
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">THÔNG TIN THIẾT BỊ</p>
-              <h2 id="farm-device-form-title">Thêm thiết bị</h2>
-            </div>
-            <button
-              id="cancel-device-record-button"
-              class="icon-button"
-              type="button"
-              aria-label="Đóng"
-            >
-              ×
-            </button>
-          </div>
-          <form id="farm-device-form" class="data-form form-grid">
-            <label>Tên<input name="name" required maxlength="50" /></label>
-            <label
-              >Loại<input
+      </form>
+    </section>
+  </section>
+
+  <section class="page-section" data-view="devices" hidden>
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">THIẾT BỊ TRONG TRANG TRẠI</p>
+        <h1>Quản lý thiết bị</h1>
+        <p class="muted-copy">
+          Ghép mã đã được cấp vào khu vực đang chọn.
+        </p>
+      </div>
+      <div class="heading-actions">
+        <button
+                id="claim-device-button"
+                class="secondary-button"
+                type="button"
+        >
+          Ghép mã thiết bị
+        </button>
+      </div>
+    </div>
+    <section class="panel device-management-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">KHU VỰC ĐANG CHỌN</p>
+          <h2 id="device-farm-title">Thiết bị</h2>
+        </div>
+        <span class="small-status">DỮ LIỆU TỪ THIẾT BỊ ĐÃ GHÉP</span>
+      </div>
+      <div id="farm-devices" class="table-wrap">
+        <div class="empty-state">
+          Chọn khu vực chuồng ở thanh trên để xem thiết bị.
+        </div>
+      </div>
+    </section>
+    <section id="farm-device-form-panel" class="panel form-panel" hidden>
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">THÔNG TIN THIẾT BỊ</p>
+          <h2 id="farm-device-form-title">Thêm thiết bị</h2>
+        </div>
+        <button
+                id="cancel-device-record-button"
+                class="icon-button"
+                type="button"
+                aria-label="Đóng"
+        >
+          ×
+        </button>
+      </div>
+      <form id="farm-device-form" class="data-form form-grid">
+        <label>Tên<input name="name" required maxlength="50" /></label>
+        <label
+        >Loại<input
                 name="typeDevice"
                 required
                 maxlength="255"
                 placeholder="Bộ điều khiển"
-            /></label>
-            <label class="wide-field"
-              >Ghi chú<input name="note" maxlength="255"
-            /></label>
-            <div class="form-actions wide-field">
-              <button class="primary-button" type="submit">Lưu thiết bị</button>
-            </div>
-          </form>
-          <p class="panel-note">
-            Thiết bị cần mã code được cấp trước để gửi MQTT. Dùng “Ghép mã thiết
-            bị” để nối mã đã provision vào chuồng này.
-          </p>
-        </section>
-        <section id="claim-device-panel" class="panel form-panel" hidden>
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">MÃ THIẾT BỊ</p>
-              <h2>Ghép vào khu vực chuồng</h2>
-            </div>
-            <button
-              id="cancel-claim-button"
-              class="icon-button"
-              type="button"
-              aria-label="Đóng"
-            >
-              ×
-            </button>
-          </div>
-          <form id="claim-device-form" class="data-form form-grid">
-            <label
-              >Mã do admin/nhà sản xuất cấp<input
+        /></label>
+        <label class="wide-field"
+        >Ghi chú<input name="note" maxlength="255"
+        /></label>
+        <div class="form-actions wide-field">
+          <button class="primary-button" type="submit">Lưu thiết bị</button>
+        </div>
+      </form>
+      <p class="panel-note">
+        Thiết bị cần mã code được cấp trước để gửi MQTT. Dùng “Ghép mã thiết
+        bị” để nối mã đã provision vào chuồng này.
+      </p>
+    </section>
+    <section id="claim-device-panel" class="panel form-panel" hidden>
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">MÃ THIẾT BỊ</p>
+          <h2>Ghép vào khu vực chuồng</h2>
+        </div>
+        <button
+                id="cancel-claim-button"
+                class="icon-button"
+                type="button"
+                aria-label="Đóng"
+        >
+          ×
+        </button>
+      </div>
+      <form id="claim-device-form" class="data-form form-grid">
+        <label
+        >Mã do admin/nhà sản xuất cấp<input
                 name="deviceCode"
                 required
                 maxlength="100"
                 placeholder="Ví dụ: stm32_2"
-            /></label>
-            <label
-              >Khu vực chuồng<select name="farmId" required></select
-            ></label>
-            <div class="form-actions">
-              <button class="primary-button" type="submit">
-                Ghép thiết bị
-              </button>
-            </div>
-          </form>
-        </section>
-      </section>
-
-      <section class="page-section" data-view="schedules" hidden>
-        <div class="page-heading">
-          <div>
-            <p class="eyebrow">TỰ ĐỘNG HÓA</p>
-            <h1>Lịch điều khiển</h1>
-            <p class="muted-copy">Cấu hình thời điểm bật hoặc tắt thiết bị.</p>
-          </div>
+        /></label>
+        <label
+        >Khu vực chuồng<select name="farmId" required></select
+        ></label>
+        <div class="form-actions">
+          <button class="primary-button" type="submit">
+            Ghép thiết bị
+          </button>
         </div>
-        <div class="panel">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">THIẾT BỊ CHẤP HÀNH</p>
-              <h2>Lịch đã tạo</h2>
-            </div>
-            <button
-              id="add-schedule-button"
-              class="primary-button"
-              type="button"
-            >
-              <span aria-hidden="true">＋</span> Tạo lịch
-            </button>
-          </div>
-          <div id="schedule-list" class="table-wrap"></div>
-        </div>
-        <section id="schedule-form-panel" class="panel form-panel" hidden>
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">THIẾT LẬP</p>
-              <h2>Tạo lịch điều khiển</h2>
-            </div>
-            <button
-              id="cancel-schedule-button"
-              class="icon-button"
-              type="button"
-              aria-label="Đóng"
-            >
-              ×
-            </button>
-          </div>
-          <form id="schedule-form" class="data-form form-grid">
-            <label>Thiết bị<select name="actorId" required></select></label
-            ><label
-              >Thời gian<input
-                name="executionTime"
-                type="time"
-                required /></label
-            ><label
-              >Hành động<select name="status">
-                <option value="1">Bật</option>
-                <option value="0">Tắt</option>
-              </select></label
-            ><label
-              >Ghi chú<input
-                name="note"
-                maxlength="255"
-                placeholder="Không bắt buộc"
-            /></label>
-            <div class="form-actions">
-              <button class="primary-button" type="submit">Lưu lịch</button>
-            </div>
-          </form>
-          <p class="panel-note">
-            Bản hiện tại hỗ trợ giờ chạy mỗi ngày; lịch theo ngày trong tuần cần
-            bổ sung trường lặp trong schema.
-          </p>
-        </section>
-      </section>
-
-      <section class="page-section" data-view="history" hidden>
-        <div class="page-heading">
-          <div>
-            <p class="eyebrow">PHÂN TÍCH MÔI TRƯỜNG</p>
-            <h1>Lịch sử dữ liệu</h1>
-            <p class="muted-copy">
-              Theo dõi biến động theo ngày, tuần hoặc tháng.
-            </p>
-          </div>
-          <div class="period-switch" role="group" aria-label="Khoảng thời gian">
-            <button
-              class="period-button is-active"
-              data-period="day"
-              type="button"
-            >
-              Ngày</button
-            ><button class="period-button" data-period="week" type="button">
-              Tuần</button
-            ><button class="period-button" data-period="month" type="button">
-              Tháng
-            </button>
-          </div>
-        </div>
-        <div class="history-layout">
-          <section class="panel">
-            <div class="panel-heading">
-              <div>
-                <p class="eyebrow">CHỌN CẢM BIẾN</p>
-                <h2>Thông số</h2>
-              </div>
-            </div>
-            <div id="history-sensor-list" class="history-sensor-list"></div>
-          </section>
-          <section class="panel chart-panel">
-            <div class="panel-heading">
-              <div>
-                <p class="eyebrow">BIỂU ĐỒ</p>
-                <h2 id="chart-title">Chọn một cảm biến</h2>
-              </div>
-              <span id="chart-unit" class="chart-unit"></span>
-            </div>
-            <div id="chart-area" class="chart-area">
-              <div class="empty-state">
-                Chọn cảm biến để xem dữ liệu theo thời gian.
-              </div>
-            </div>
-            <div id="history-table" class="table-wrap"></div>
-          </section>
-        </div>
-      </section>
-
-      <section class="page-section" data-view="notifications" hidden>
-        <div class="page-heading">
-          <div>
-            <p class="eyebrow">NHẬT KÝ HỆ THỐNG</p>
-            <h1>Thông báo</h1>
-            <p class="muted-copy">
-              Cảnh báo và cập nhật từ trang trại của bạn.
-            </p>
-          </div>
-        </div>
-        <section class="panel">
-          <div id="notification-list" class="notification-list"></div>
-        </section>
-      </section>
-
-      <footer class="app-footer">
-        <span>CHICKEN MONITOR</span>
-        <span>Giám sát nông trại · 2026</span>
-      </footer>
-    </main>
-    <dialog id="camera-dialog" class="camera-dialog">
-      <form method="dialog">
-        <button class="icon-button dialog-close" aria-label="Đóng">×</button>
       </form>
-      <p class="eyebrow">PHÁT TRỰC TIẾP</p>
-      <h2 id="camera-dialog-title">Camera</h2>
-      <div class="video-stage">
-        <p>Chưa có luồng video</p>
-        <small
-          >Cần camera service cung cấp HLS hoặc WebRTC. Trình duyệt không phát
-          RTSP trực tiếp.</small
-        >
+    </section>
+  </section>
+
+  <section class="page-section" data-view="schedules" hidden>
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">TỰ ĐỘNG HÓA</p>
+        <h1>Lịch điều khiển</h1>
+        <p class="muted-copy">Cấu hình thời điểm bật hoặc tắt thiết bị.</p>
       </div>
-    </dialog>
-  </body>
+    </div>
+    <div class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">THIẾT BỊ CHẤP HÀNH</p>
+          <h2>Lịch đã tạo</h2>
+        </div>
+        <button
+                id="add-schedule-button"
+                class="primary-button"
+                type="button"
+        >
+          <span aria-hidden="true">＋</span> Tạo lịch
+        </button>
+      </div>
+      <div id="schedule-list" class="table-wrap"></div>
+    </div>
+    <section id="schedule-form-panel" class="panel form-panel" hidden>
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">THIẾT LẬP</p>
+          <h2>Tạo lịch điều khiển</h2>
+        </div>
+        <button
+                id="cancel-schedule-button"
+                class="icon-button"
+                type="button"
+                aria-label="Đóng"
+        >
+          ×
+        </button>
+      </div>
+      <form id="schedule-form" class="data-form form-grid">
+        <label>Thiết bị<select name="actorId" required></select></label
+        ><label
+      >Thời gian<input
+              name="executionTime"
+              type="time"
+              required /></label
+      ><label
+      >Hành động<select name="status">
+        <option value="1">Bật</option>
+        <option value="0">Tắt</option>
+      </select></label
+      ><label
+      >Ghi chú<input
+              name="note"
+              maxlength="255"
+              placeholder="Không bắt buộc"
+      /></label>
+        <div class="form-actions">
+          <button class="primary-button" type="submit">Lưu lịch</button>
+        </div>
+      </form>
+      <p class="panel-note">
+        Bản hiện tại hỗ trợ giờ chạy mỗi ngày; lịch theo ngày trong tuần cần
+        bổ sung trường lặp trong schema.
+      </p>
+    </section>
+  </section>
+
+  <section class="page-section" data-view="history" hidden>
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">PHÂN TÍCH MÔI TRƯỜNG</p>
+        <h1>Lịch sử dữ liệu</h1>
+        <p class="muted-copy">
+          Theo dõi biến động theo ngày, tuần hoặc tháng.
+        </p>
+      </div>
+      <div class="period-switch" role="group" aria-label="Khoảng thời gian">
+        <button
+                class="period-button is-active"
+                data-period="day"
+                type="button"
+        >
+          Ngày</button
+        ><button class="period-button" data-period="week" type="button">
+        Tuần</button
+      ><button class="period-button" data-period="month" type="button">
+        Tháng
+      </button>
+      </div>
+    </div>
+    <div class="history-layout">
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">CHỌN CẢM BIẾN</p>
+            <h2>Thông số</h2>
+          </div>
+        </div>
+        <div id="history-sensor-list" class="history-sensor-list"></div>
+      </section>
+      <section class="panel chart-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">BIỂU ĐỒ</p>
+            <h2 id="chart-title">Chọn một cảm biến</h2>
+          </div>
+          <span id="chart-unit" class="chart-unit"></span>
+        </div>
+        <div id="chart-area" class="chart-area">
+          <div class="empty-state">
+            Chọn cảm biến để xem dữ liệu theo thời gian.
+          </div>
+        </div>
+        <div id="history-table" class="table-wrap"></div>
+      </section>
+    </div>
+  </section>
+
+  <section class="page-section notifications-page" data-view="notifications" hidden>
+    <div class="page-heading notifications-heading">
+      <div>
+        <p class="eyebrow">NHẬT KÝ HỆ THỐNG</p>
+        <h1>Thông báo</h1>
+        <p class="muted-copy">Theo dõi cảnh báo và hoạt động trang trại.</p>
+      </div>
+    </div>
+
+    <div class="notification-summary" aria-label="Thống kê thông báo">
+      <article class="notification-stat">
+        <span class="notification-stat-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+        </span>
+        <strong id="notification-total-count">0</strong>
+        <span>Tổng thông báo</span>
+      </article>
+      <article class="notification-stat">
+        <span class="notification-stat-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        </span>
+        <strong id="notification-unread-count">0</strong>
+        <span>Chưa đọc</span>
+      </article>
+      <article class="notification-stat">
+        <span class="notification-stat-icon notification-stat-icon-warning" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M10.3 3.9 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+        </span>
+        <strong id="notification-warning-count">0</strong>
+        <span>Cảnh báo</span>
+      </article>
+    </div>
+
+    <div class="notification-section-heading">
+      <div>
+        <h2>Thông báo gần đây</h2>
+        <p>Các cập nhật mới nhất từ hệ thống Chicken Monitor.</p>
+      </div>
+      <button id="notification-read-all" class="notification-read-all" type="button" disabled>
+        <span aria-hidden="true">✓</span> Đánh dấu đã đọc
+      </button>
+    </div>
+
+    <div class="notification-toolbar">
+      <div class="notification-filters" role="group" aria-label="Bộ lọc thông báo">
+        <button class="notification-filter is-active" type="button"
+                data-notification-filter="all" aria-pressed="true">Tất cả</button>
+        <button class="notification-filter" type="button"
+                data-notification-filter="unread" aria-pressed="false">Chưa đọc</button>
+        <button class="notification-filter" type="button"
+                data-notification-filter="warning" aria-pressed="false">Cảnh báo</button>
+        <button class="notification-filter" type="button"
+                data-notification-filter="system" aria-pressed="false">Hệ thống</button>
+      </div>
+    </div>
+
+    <section class="panel notification-panel" aria-label="Danh sách thông báo">
+      <div id="notification-list" class="notification-list" aria-live="polite">
+        <div class="empty-state">Đang tải thông báo...</div>
+      </div>
+    </section>
+  </section>
+
+  <footer class="app-footer">
+    <span>CHICKEN MONITOR</span>
+    <span>Giám sát nông trại · 2026</span>
+  </footer>
+</main>
+<dialog id="camera-dialog" class="camera-dialog">
+  <form method="dialog">
+    <button class="icon-button dialog-close" aria-label="Đóng">×</button>
+  </form>
+  <p class="eyebrow">PHÁT TRỰC TIẾP</p>
+  <h2 id="camera-dialog-title">Camera</h2>
+  <div class="video-stage">
+    <p>Chưa có luồng video</p>
+    <small
+    >Cần camera service cung cấp HLS hoặc WebRTC. Trình duyệt không phát
+      RTSP trực tiếp.</small
+    >
+  </div>
+</dialog>
+</body>
 </html>

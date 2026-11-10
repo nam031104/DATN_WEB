@@ -4,6 +4,7 @@ import com.chickenmonitor.entity.Actor;
 import com.chickenmonitor.entity.Device;
 import com.chickenmonitor.entity.Sensor;
 import com.chickenmonitor.entity.SensorData;
+import com.chickenmonitor.service.SensorAlertService;
 import com.chickenmonitor.repository.ActorRepository;
 import com.chickenmonitor.repository.DeviceRepository;
 import com.chickenmonitor.repository.SensorDataRepository;
@@ -44,6 +45,7 @@ public class MqttIntegrationService implements ApplicationRunner, MqttCallbackEx
     private final SensorDataRepository sensorDataRepository;
     private final ActorRepository actorRepository;
     private final LiveUpdateHandler liveUpdateHandler;
+    private final SensorAlertService sensorAlertService;
     private final Map<Long, Integer> pendingAutomaticCommands = new ConcurrentHashMap<>();
     private final boolean enabled;
     private final String brokerUrl;
@@ -58,6 +60,7 @@ public class MqttIntegrationService implements ApplicationRunner, MqttCallbackEx
                                   SensorDataRepository sensorDataRepository,
                                   ActorRepository actorRepository,
                                   LiveUpdateHandler liveUpdateHandler,
+                                  SensorAlertService sensorAlertService,
                                   @Value("${app.mqtt.enabled:false}") boolean enabled,
                                   @Value("${app.mqtt.broker-url:tcp://localhost:1883}") String brokerUrl,
                                   @Value("${app.mqtt.client-id:chickenmonitor-server}") String clientId,
@@ -69,6 +72,7 @@ public class MqttIntegrationService implements ApplicationRunner, MqttCallbackEx
         this.sensorDataRepository = sensorDataRepository;
         this.actorRepository = actorRepository;
         this.liveUpdateHandler = liveUpdateHandler;
+        this.sensorAlertService = sensorAlertService;
         this.enabled = enabled;
         this.brokerUrl = brokerUrl;
         this.clientId = clientId;
@@ -188,6 +192,7 @@ public class MqttIntegrationService implements ApplicationRunner, MqttCallbackEx
                         .map(sensor -> {
                             SensorData data = SensorData.builder().sensor(sensor).value(item.value()).unit(item.unit()).build();
                             SensorData saved = sensorDataRepository.save(data);
+                            sensorAlertService.check(sensor, saved.getValue(), saved.getUnit());
                             return new SensorSnapshot(sensor.getTypeSensor(), saved.getValue(), saved.getUnit(), saved.getCreatedAt());
                         }).orElse(null))
                 .filter(java.util.Objects::nonNull)

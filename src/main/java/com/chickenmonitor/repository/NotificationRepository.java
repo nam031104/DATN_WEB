@@ -12,4 +12,11 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     List<Notification> findByUserUserIdOrderByCreatedAtDesc(Long userId);
 
     List<Notification> findTop100ByUserUserIdOrderByCreatedAtDesc(Long userId);
+
+    org.springframework.data.domain.Page<Notification> findByUserUserId(
+            Long userId, org.springframework.data.domain.Pageable pageable);
+
+    // Persisted alert cooldown; prevents MQTT packets from creating the same alert each second.
+    java.util.Optional<Notification> findFirstByUserUserIdAndMessageStartingWithOrderByCreatedAtDesc(
+            Long userId, String messagePrefix);
 }

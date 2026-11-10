@@ -1,12 +1,15 @@
 package com.chickenmonitor.controller;
 
 import com.chickenmonitor.entity.User;
+import com.chickenmonitor.entity.Notification;
 import com.chickenmonitor.dto.request.LoginRequest;
 import com.chickenmonitor.dto.request.RegisterRequest;
 import com.chickenmonitor.repository.UserRepository;
 import com.chickenmonitor.security.JwtUtils;
 import com.chickenmonitor.service.NotificationService;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,6 +28,8 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") // Cho phép React gọi API
 public class AuthController {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
@@ -108,6 +113,17 @@ public class AuthController {
                     .build();
 
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+
+            try {
+                notificationService.createNotification(Notification.builder()
+                        .user(user)
+                        .message("Đăng nhập thành công vào hệ thống Chicken Monitor.")
+                        .status(0)
+                        .build());
+            } catch (RuntimeException ex) {
+                // An optional notification must not block a successful login.
+                log.warn("Không lưu được thông báo đăng nhập cho user {}", user.getUserId(), ex);
+            }
 
             return ResponseEntity.ok(Map.of(
                     "message", "Đăng nhập thành công",
