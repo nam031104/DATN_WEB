@@ -15,7 +15,7 @@ export function connectLiveUpdates() {
       const message = JSON.parse(event.data);
       if (
         message.farmId === state.farmId &&
-        ["telemetry", "device-registered"].includes(message.type)
+        ["telemetry", "ackactor","ackthreshold"].includes(message.type)
       ) {
         await loadDashboard();
       }

@@ -1469,3 +1469,50 @@
   .notifications-page .notice-actions { align-self: start; gap: 6px; }
 }
 
+
+.hardware-section {
+  margin-top: 20px;
+}
+
+.hardware-rows {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.hardware-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+  padding: 14px;
+  border: 1px solid var(--border-color, #dce5dc);
+  border-radius: 12px;
+  background: var(--surface-color, #fff);
+}
+
+.hardware-row label {
+  display: grid;
+  gap: 6px;
+}
+
+.hardware-row [data-custom-wrapper][hidden] {
+  display: none;
+}
+
+.hardware-row button {
+  margin-bottom: 2px;
+}
+
+@media (max-width: 760px) {
+  .hardware-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .hardware-row {
+    grid-template-columns: 1fr;
+  }
+}
+

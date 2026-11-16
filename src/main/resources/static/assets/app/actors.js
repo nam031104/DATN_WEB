@@ -2,9 +2,15 @@ import { api, state, escapeHtml, notify } from "./core.js";
 import { loadDashboard } from "./dashboard.js";
 
 export function openActorConfig(actor) {
+  if (actor.mode === 2) {
+    notify("Actor này không được phép thay đổi chế độ cấu hình.");
+    return;
+  }
+
   const form = document.querySelector("#actor-config-form");
   form.elements.actorId.value = actor.actorId;
   form.elements.mode.value = String(actor.mode ?? 0);
+
   form.elements.sourceSensorCode.innerHTML = (state.dashboard?.sensors || [])
     .filter((sensor) => sensor.externalCode)
     .map(
@@ -12,14 +18,18 @@ export function openActorConfig(actor) {
         `<option value="${escapeHtml(sensor.externalCode)}">${escapeHtml(sensor.typeSensor)} · ${escapeHtml(sensor.deviceName)}</option>`,
     )
     .join("");
+
   form.elements.sourceSensorCode.value =
     actor.sourceSensorCode ||
     form.elements.sourceSensorCode.options[0]?.value ||
     "";
+
   form.elements.thresholdMin.value = actor.thresholdMin ?? "";
   form.elements.thresholdMax.value = actor.thresholdMax ?? "";
+
   document.querySelector("#actor-config-title").textContent =
     `Cấu hình ${actor.typeActor} · ${actor.deviceName}`;
+
   form.hidden = false;
   syncActorModeFields();
   form.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -45,25 +55,39 @@ export function bindActorEvents() {
         const actor = state.dashboard?.actors.find(
           (item) => item.actorId === Number(config.dataset.actorConfig),
         );
-        if (actor) openActorConfig(actor);
-      }
-      if (toggle) {
-        toggle.disabled = true;
-        try {
-          await api(`/api/actors/${toggle.dataset.actorToggle}/command`, {
-            method: "POST",
-            body: JSON.stringify({
-              mode: 1,
-              status: Number(toggle.dataset.nextStatus),
-            }),
-          });
-          notify("Đã gửi lệnh, chờ thiết bị xác nhận.", true);
-        } catch (error) {
-          notify(error.message);
-        } finally {
-          toggle.disabled = false;
+
+        if (actor && actor.mode !== 2) {
+          openActorConfig(actor);
         }
       }
+        if (toggle) {
+            toggle.disabled = true;
+
+            try {
+                const actor = state.dashboard?.actors.find(
+                    (item) => item.actorId === Number(toggle.dataset.actorToggle)
+                );
+
+                if (!actor) {
+                    throw new Error("Không tìm thấy Actor.");
+                }
+
+                await api(`/api/actors/${toggle.dataset.actorToggle}/command`, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        mode: actor.mode,
+                        status: Number(toggle.dataset.nextStatus),
+                    }),
+                });
+
+                notify("Đã gửi lệnh, chờ thiết bị xác nhận.", true);
+
+            } catch (error) {
+                notify(error.message);
+            } finally {
+                toggle.disabled = false;
+            }
+        }
     });
   document.querySelector("#cancel-actor-config").addEventListener("click", () => {
     document.querySelector("#actor-config-form").hidden = true;
@@ -76,6 +100,15 @@ export function bindActorEvents() {
     .addEventListener("submit", async (event) => {
       event.preventDefault();
       const form = event.currentTarget;
+      const actor = state.dashboard?.actors.find(
+        (item) => item.actorId === Number(form.elements.actorId.value),
+      );
+
+      if (!actor || actor.mode === 2) {
+        notify("Actor này không được phép thay đổi cấu hình.");
+        return;
+      }
+
       const mode = Number(form.elements.mode.value);
       const payload = { mode };
       if (mode === 0) {

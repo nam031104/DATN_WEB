@@ -73,14 +73,26 @@ public class AdminDeviceController {
                     .typeSensor(requireText(item.typeSensor(), "Loại cảm biến"))
                     .build()));
         }
+
         if (request.actors() != null) {
-            request.actors().forEach(item -> actorRepository.save(Actor.builder()
-                    .device(device)
-                    .externalCode(requireText(item.externalCode(), "Mã actor"))
-                    .typeActor(requireText(item.typeActor(), "Loại actor"))
-                    .mode(item.mode() == null ? 0 : item.mode())
-                    .status(item.status() == null ? 0 : item.status())
-                    .build()));
+            request.actors().forEach(item -> {
+                int mode = item.mode() == null ? 0 : item.mode();
+
+                if (mode < 0 || mode > 2) {
+                    throw new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST,
+                            "Mode actor chỉ được phép là 0, 1 hoặc 2."
+                    );
+                }
+
+                actorRepository.save(Actor.builder()
+                        .device(device)
+                        .externalCode(requireText(item.externalCode(), "Mã actor"))
+                        .typeActor(requireText(item.typeActor(), "Loại actor"))
+                        .mode(mode)
+                        .status(item.status() == null ? 0 : item.status())
+                        .build());
+            });
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(java.util.Map.of(
             "deviceId", device.getDeviceId(), "deviceCode", code,

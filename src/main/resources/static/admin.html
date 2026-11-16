@@ -177,29 +177,42 @@
             <label>Người dùng<select name="userId"></select></label>
             <label>Chuồng thuộc user<select name="farmId"></select></label>
             <label>Ghi chú<input name="note" maxlength="255" /></label>
-            <label class="wide-field"
-              >Cảm biến (mỗi dòng: mã:type)<textarea
-                name="sensors"
-                rows="3"
-                placeholder="temp_1:temperature&#10;humidity_1:humidity&#10;nh3_1:nh3&#10;weight_1:weight"
-              ></textarea>
-            </label>
-            <label class="wide-field"
-              >Actor (mỗi dòng: mã:type)<textarea
-                name="actors"
-                rows="3"
-                placeholder="pump_1:pump&#10;fan_1:fan&#10;light_1:light"
-              ></textarea>
-            </label>
+
+            <div class="wide-field hardware-section">
+              <div class="panel-heading">
+                <div>
+                  <h3>Cảm biến (Sensor)</h3>
+                  <p class="muted-copy">Thêm các cảm biến thuộc thiết bị này.</p>
+                </div>
+                <button id="add-sensor-row" class="secondary-button" type="button">
+                  + Thêm Sensor
+                </button>
+              </div>
+              <div id="sensor-rows" class="hardware-rows"></div>
+            </div>
+
+            <div class="wide-field hardware-section">
+              <div class="panel-heading">
+                <div>
+                  <h3>Thiết bị chấp hành (Actor)</h3>
+                  <p class="muted-copy">Thêm các actor thuộc thiết bị này.</p>
+                </div>
+                <button id="add-actor-row" class="secondary-button" type="button">
+                  + Thêm Actor
+                </button>
+              </div>
+              <div id="actor-rows" class="hardware-rows"></div>
+            </div>
+
             <div class="form-actions wide-field">
               <button class="primary-button" type="submit">Cấp thiết bị</button>
             </div>
           </form>
           <p class="panel-note">
-            Có thể để trống cả người dùng và chuồng để tạo mã chờ người dùng
-            ghép nối.
+            Có thể để trống cả người dùng và chuồng để tạo mã chờ người dùng ghép nối.
           </p>
         </section>
+
       </section>
       <footer class="app-footer">
         <span>CHICKEN MONITOR</span><span>KHU VỰC QUẢN TRỊ</span>

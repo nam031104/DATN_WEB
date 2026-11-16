@@ -6,6 +6,8 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,6 +17,8 @@ public class LiveUpdateHandler extends TextWebSocketHandler {
 
     private final ObjectMapper objectMapper;
     private final ConcurrentHashMap<String, Set<WebSocketSession>> sessionsByUsername = new ConcurrentHashMap<>();
+    private static final Logger log =
+            LoggerFactory.getLogger(LiveUpdateHandler.class);
 
     public LiveUpdateHandler(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
@@ -42,20 +46,39 @@ public class LiveUpdateHandler extends TextWebSocketHandler {
         }
     }
 
+
     public void sendToUser(String username, Object payload) {
         Set<WebSocketSession> sessions = sessionsByUsername.get(username);
-        if (sessions == null || sessions.isEmpty()) return;
+
+
+        // Bước 1: Chuyển payload thành JSON
+        final String json;
+
         try {
-            String json = objectMapper.writeValueAsString(payload);
-            for (WebSocketSession session : sessions) {
-                if (session.isOpen()) {
-                    synchronized (session) {
-                        session.sendMessage(new TextMessage(json));
-                    }
-                }
+            json = objectMapper.writeValueAsString(payload);
+        } catch (Exception e) {
+            log.error("[WS] JSON serialization failed", e);
+            return;
+        }
+
+        // Bước 2: Gửi dữ liệu
+        for (WebSocketSession session : sessions) {
+            if (!session.isOpen()) {
+                log.warn("[WS] Session is closed: {}", session.getId());
+                continue;
             }
-        } catch (Exception ignored) {
-            sessions.removeIf(session -> !session.isOpen());
+
+            try {
+                synchronized (session) {
+                    session.sendMessage(new TextMessage(json));
+                }
+
+
+            } catch (Exception e) {
+                log.error("[WS] Sending failed for session: {}",
+                        session.getId(), e);
+            }
         }
     }
+
 }

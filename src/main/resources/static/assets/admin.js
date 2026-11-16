@@ -33,6 +33,174 @@ function notify(message, success = false) {
   }, 4500);
 }
 
+
+const SENSOR_TYPES = [
+  { value: "TEMPERATURE", label: "TEMPERATURE" },
+  { value: "HUMIDITY", label: "HUMIDITY" },
+  { value: "MQ135", label: "MQ135" },
+  { value: "LOADCELL", label: "LOADCELL" },
+];
+
+const ACTOR_TYPES = [
+  { value: "LIGHT", label: "LIGHT" },
+  { value: "FAN", label: "FAN" },
+  { value: "SERVO", label: "SERVO" },
+];
+
+function createTypeOptions(types) {
+  return types
+    .map(
+      (type) =>
+        `<option value="${type.value}">${type.label}</option>`,
+    )
+    .join("") +
+    '<option value="CUSTOM">Khác - Tự nhập</option>';
+}
+
+function addHardwareRow(containerId, type) {
+  const container = document.querySelector(`#${containerId}`);
+  const isSensor = type === "sensor";
+  const types = isSensor ? SENSOR_TYPES : ACTOR_TYPES;
+
+  const row = document.createElement("div");
+  row.className = "hardware-row";
+
+  row.innerHTML = `
+    <label>
+      Mã ${isSensor ? "Sensor" : "Actor"}
+      <input
+        type="text"
+        data-hardware-code
+        required
+        maxlength="100"
+        placeholder="${isSensor ? "temp_1" : "fan_1"}"
+      />
+    </label>
+
+    <label>
+      Loại ${isSensor ? "Sensor" : "Actor"}
+      <select data-hardware-type>
+        ${createTypeOptions(types)}
+      </select>
+    </label>
+
+    <label data-custom-wrapper hidden>
+      Loại tự nhập
+      <input
+        type="text"
+        data-custom-type
+        maxlength="100"
+        placeholder="Nhập loại thiết bị"
+      />
+    </label>
+
+    ${
+      isSensor
+        ? ""
+        : `
+          <label>
+            Chế độ hoạt động
+            <select data-actor-mode>
+              <option value="0">Tự động</option>
+              <option value="1">Thủ công</option>
+              <option value="2">Không được cấu hình</option>
+            </select>
+          </label>
+        `
+    }
+
+    <button
+      type="button"
+      class="table-action"
+      data-remove-hardware
+      aria-label="Xóa dòng"
+    >
+      Xóa
+    </button>
+  `;
+
+  container.appendChild(row);
+}
+
+function getHardwareRows(containerId, type) {
+  const container = document.querySelector(`#${containerId}`);
+  const isSensor = type === "sensor";
+
+  return [...container.querySelectorAll(".hardware-row")].map((row) => {
+    const externalCode = row.querySelector("[data-hardware-code]").value.trim();
+    const selectedType = row.querySelector("[data-hardware-type]").value;
+    const customType = row.querySelector("[data-custom-type]")?.value.trim();
+
+    if (!externalCode) {
+      throw new Error(`Vui lòng nhập mã ${isSensor ? "Sensor" : "Actor"}.`);
+    }
+
+    if (selectedType === "CUSTOM" && !customType) {
+      throw new Error(`Vui lòng nhập loại ${isSensor ? "Sensor" : "Actor"} tùy chỉnh.`);
+    }
+
+    const hardwareType =
+      selectedType === "CUSTOM" ? customType : selectedType;
+
+    if (isSensor) {
+      return {
+        externalCode,
+        typeSensor: hardwareType,
+      };
+    }
+
+    return {
+      externalCode,
+      typeActor: hardwareType,
+      mode: Number(row.querySelector("[data-actor-mode]").value),
+      status: 0,
+    };
+  });
+}
+
+function bindHardwareEvents() {
+  document.querySelector("#add-sensor-row").addEventListener("click", () => {
+    addHardwareRow("sensor-rows", "sensor");
+  });
+
+  document.querySelector("#add-actor-row").addEventListener("click", () => {
+    addHardwareRow("actor-rows", "actor");
+  });
+
+  document.querySelector("#sensor-rows").addEventListener("change", (event) => {
+    if (event.target.matches("[data-hardware-type]")) {
+      const row = event.target.closest(".hardware-row");
+      const custom = row.querySelector("[data-custom-wrapper]");
+      const input = row.querySelector("[data-custom-type]");
+
+      custom.hidden = event.target.value !== "CUSTOM";
+      input.required = event.target.value === "CUSTOM";
+    }
+  });
+
+  document.querySelector("#actor-rows").addEventListener("change", (event) => {
+    if (event.target.matches("[data-hardware-type]")) {
+      const row = event.target.closest(".hardware-row");
+      const custom = row.querySelector("[data-custom-wrapper]");
+      const input = row.querySelector("[data-custom-type]");
+
+      custom.hidden = event.target.value !== "CUSTOM";
+      input.required = event.target.value === "CUSTOM";
+    }
+  });
+
+  ["sensor-rows", "actor-rows"].forEach((containerId) => {
+    document.querySelector(`#${containerId}`).addEventListener("click", (event) => {
+      const remove = event.target.closest("[data-remove-hardware]");
+      if (remove) {
+        remove.closest(".hardware-row").remove();
+      }
+    });
+  });
+}
+
+
+
 async function loadFarmsForUser(userId, select) {
   if (!userId) {
     select.innerHTML = '<option value="">Chưa gán</option>';
@@ -185,32 +353,45 @@ document
       document.querySelector("#admin-device-form [name=farmId]"),
     );
   });
+
 document
   .querySelector("#admin-device-form")
   .addEventListener("submit", async (event) => {
     event.preventDefault();
+
     const form = event.currentTarget;
     const values = Object.fromEntries(new FormData(form));
+
     try {
       const payload = {
         ...values,
         userId: values.userId || null,
         farmId: values.farmId ? Number(values.farmId) : null,
-        sensors: parseHardwareRows(values.sensors, true),
-        actors: parseHardwareRows(values.actors),
+
+        sensors: getHardwareRows("sensor-rows", "sensor"),
+        actors: getHardwareRows("actor-rows", "actor"),
       };
+
       await api("/api/admin/devices/provision", {
         method: "POST",
         body: JSON.stringify(payload),
       });
+
       form.reset();
+
+      document.querySelector("#sensor-rows").innerHTML = "";
+      document.querySelector("#actor-rows").innerHTML = "";
+
       document.querySelector("#admin-device-form-panel").hidden = true;
+
       await renderAdmin();
+
       notify("Đã cấp cấu hình thiết bị.", true);
     } catch (error) {
       notify(error.message);
     }
   });
+
 
 document.querySelector("#profile-button").addEventListener("click", (event) => {
   const popover = document.querySelector("#profile-popover");
@@ -243,6 +424,7 @@ async function startAdmin() {
       .trim()
       .charAt(0)
       .toUpperCase();
+    await bindHardwareEvents();
     await renderAdmin();
   } catch {
     window.location.assign("/");

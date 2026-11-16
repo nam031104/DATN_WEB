@@ -49,16 +49,20 @@ public class ActorController {
         Double thresholdMin = request.mode() == 0 ? request.thresholdMin() : null;
         Double thresholdMax = request.mode() == 0 ? request.thresholdMax() : null;
         try {
-            mqttIntegrationService.publishActorModeCommand(actor, request.mode(), sourceCode, thresholdMin, thresholdMax);
+            if (request.thresholdMin() == null && request.thresholdMax() ==null){
+                mqttIntegrationService.publishActorCommand(actor.getDevice(),actor,request.mode(),0);
+            } else {
+                mqttIntegrationService.publishThreshold(actor, request.mode(), sourceCode, thresholdMin, thresholdMax);
+            }
         } catch (IllegalStateException exception) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, exception.getMessage());
         }
-        actor.setMode(request.mode());
-        actor.setSourceSensorCode(sourceCode);
-        actor.setThresholdMin(thresholdMin);
-        actor.setThresholdMax(thresholdMax);
-        Actor saved = actorRepository.save(actor);
-        return ResponseEntity.ok(java.util.Map.of("actorId", saved.getActorId(), "mode", saved.getMode()));
+//        actor.setMode(request.mode());
+//        actor.setSourceSensorCode(sourceCode);
+//        actor.setThresholdMin(thresholdMin);
+//        actor.setThresholdMax(thresholdMax);
+//        Actor saved = actorRepository.save(actor);
+        return ResponseEntity.ok(java.util.Map.of("message","Đã gửi đến thiết bị"));
         }
 
     @GetMapping("/device/{deviceId}")
@@ -79,13 +83,24 @@ public class ActorController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
         Actor actor = actorRepository.findByActorIdAndDeviceFarmUserUserId(id, user.getUserId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        if (actor.getMode() == null || actor.getMode() != 1) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Chuyển thiết bị sang thủ công trước khi gửi lệnh bật/tắt.");
+        if (actor.getMode() == null ||
+                (actor.getMode() != 1 && actor.getMode() != 2)) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Chỉ thiết bị ở chế độ thủ công hoặc chế độ cố định mới được điều khiển."
+            );
         }
-        if (request.mode() == null || request.mode() != 1
-                || request.status() == null || (request.status() != 0 && request.status() != 1)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Lệnh bật/tắt chỉ nhận mode=1 và status 0 hoặc 1.");
+
+        if (request.mode() == null
+                || (request.mode() != 1 && request.mode() != 2)
+                || request.status() == null
+                || (request.status() != 0 && request.status() != 1)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Lệnh điều khiển không hợp lệ."
+            );
         }
+
         try {
             mqttIntegrationService.publishActorCommand(actor.getDevice(), actor, request.mode(), request.status());
             return ResponseEntity.accepted().body(java.util.Map.of(

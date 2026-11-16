@@ -17,4 +17,5 @@ public interface ActorRepository extends JpaRepository<Actor, Long> {
     List<Actor> findByDeviceDeviceIdAndDeviceFarmUserUserId(Long deviceId, Long userId);
 
     Optional<Actor> findByDeviceDeviceIdAndExternalCode(Long deviceId, String externalCode);
+    Optional<Actor> findByExternalCode(String externalCode);
 }
