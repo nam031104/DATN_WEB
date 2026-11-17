@@ -1,9 +1,6 @@
 package com.chickenmonitor.ingestion;
 
-import com.chickenmonitor.ingestion.MqttHandle.AckHandler;
-import com.chickenmonitor.ingestion.MqttHandle.AckThresholdHandler;
-import com.chickenmonitor.ingestion.MqttHandle.FeedHandler;
-import com.chickenmonitor.ingestion.MqttHandle.TelemetryHandler;
+import com.chickenmonitor.ingestion.MqttHandle.*;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,13 +20,15 @@ public class MqttRouter {
             TelemetryHandler telemetry,
             AckHandler ackHandler,
             AckThresholdHandler ackThresholdHandler,
-            FeedHandler feedHandler
+            FeedHandler feedHandler,
+            ResponseHandler responseHandler
     ) {
         this.handlers = Map.of(
                 "telemetry", telemetry,
                 "ack", ackHandler,
                 "ackthreshold", ackThresholdHandler,
-                "feed", feedHandler
+                "feed", feedHandler,
+                "response", responseHandler
         );
     }
 

@@ -43,6 +43,7 @@ public class MqttIntegrationService implements ApplicationRunner, MqttCallbackEx
     private static final String ACK_TOPIC = "chickenmonitor/+/ack";
     private static final String ACKTHRESHOLD_TOPIC = "chickenmonitor/+/ackthreshold";
     private static final String FEEDBUTTON_TOPIC = "chickenmonitor/+/feedbutton";
+    private static final String RESPONSE_TOPIC = "chickenmonitor/+/response";
 
     private final ObjectMapper objectMapper;
     private final DeviceRepository deviceRepository;
@@ -133,6 +134,7 @@ public class MqttIntegrationService implements ApplicationRunner, MqttCallbackEx
             client.subscribe(TELEMETRY_TOPIC, 1);
             client.subscribe(ACKTHRESHOLD_TOPIC, 1);
             client.subscribe(FEEDBUTTON_TOPIC, 1);
+            client.subscribe(RESPONSE_TOPIC, 1);
             log.info("Subscribed to device registration and telemetry topics at {}", serverURI);
         } catch (MqttException exception) {
             log.error("Unable to subscribe to device topics", exception);

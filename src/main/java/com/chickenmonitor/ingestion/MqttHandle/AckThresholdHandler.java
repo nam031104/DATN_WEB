@@ -47,11 +47,23 @@ public class AckThresholdHandler implements MqttMessageHandler {
 
             log.info("Saved ThresholdActor");
 
-            liveUpdateHandler.sendToUser(device.getFarm().getUser().getUsername(), Map.of(
-                    "type",  "ackthreshold",
-                    "farmId", device.getFarm().getFarmId(),
-                    "deviceId", device.getDeviceId(),
-                    "Actor", actor));
+            Map<String, Object> actorData = Map.of(
+                    "actorId", actor.getActorId(),
+                    "externalCode", actor.getExternalCode(),
+                    "mode", actor.getMode(),
+                    "thresholdMin", actor.getThresholdMin(),
+                    "thresholdMax", actor.getThresholdMax()
+            );
+
+            liveUpdateHandler.sendToUser(
+                    device.getFarm().getUser().getUsername(),
+                    Map.of(
+                            "type", "ackthreshold",
+                            "farmId", device.getFarm().getFarmId(),
+                            "deviceId", device.getDeviceId(),
+                            "actor", actorData
+                    )
+            );
 
         } catch (Exception exception) {
             log.error("Unable to process MQTT message from {}", topic, exception);
